@@ -1,10 +1,21 @@
-from flask import render_template, url_for, request
+import atexit
+
+from apscheduler.schedulers.background import BackgroundScheduler
 from app import webapp, memcache
 from flask import json
+from flask import render_template, url_for, request
 
+# https://stackoverflow.com/questions/21214270/how-to-schedule-a-function-to-run-every-hour-on-flask
+scheduler = BackgroundScheduler(daemon=True)
+scheduler.add_job(func=memcache.write_statistics, trigger="interval", seconds=5)
+
+# shut down the scheduler when terminating
+atexit.register(lambda: scheduler.shutdown())
 
 @webapp.route('/')
 def main():
+    scheduler.start()
+
     return render_template("main.html")
 
 
@@ -48,7 +59,6 @@ def put():
             mimetype='application/json'
         )
 
-    print(memcache)
     return response
 
 
@@ -62,7 +72,6 @@ def clear():
         mimetype='application/json'
     )
 
-    print(memcache)
     return response
 
 
@@ -83,7 +92,6 @@ def invalidateKey():
             mimetype='application/json'
         )
 
-    print(memcache)
     return response
 
 
@@ -97,5 +105,4 @@ def refreshConfiguration():
         mimetype='application/json'
     )
 
-    print(memcache)
     return response
