@@ -19,6 +19,19 @@
             <input type="submit" value="put" />
         </form>
 
+        <form action="{{ url_for('clear')}}" method="post">
+            <input type="submit" value="clear" />
+        </form>
+
+        <form action="{{ url_for('invalidateKey')}}" method="post">
+            <label>key:</label>
+            <input type="text" name="key" />
+            <input type="submit" value="invalidate" />
+        </form>
+
+        <form action="{{ url_for('refreshConfiguration')}}" method="post">
+            <input type="submit" value="refresh" />
+        </form>
 
     <body>    
 </html>

@@ -26,10 +26,17 @@ class Memcache:
         self.refresh_config()
 
     def __str__(self):
-        msg = "capacity: {} MB\npolicy: {}\n\n" \
-              + "# of items: {}\ntotal size: {} MB\n\n" \
-              + "# of requests: {}\n# of miss: {}\nmiss rate: {}\nhit rate: {}\n\n"
-        miss_rate = self.num_miss / self.num_requests
+        msg = "------ configuration parameters -------\n" \
+                + "capacity: {} MB\npolicy: {}\n" \
+                + "-------- utilization over time --------\n" \
+                + "# of items: {}\ntotal size: {} MB\n" \
+                + "-------- miss rate information --------\n" \
+                + "# of requests: {}\n# of miss: {}\nmiss rate: {}\nhit rate: {}\n" \
+                + "---------------------------------------"
+        if self.num_requests == 0:
+            miss_rate = 1
+        else:
+            miss_rate = self.num_miss / self.num_requests
 
         return msg.format(self.capacity, self.policy,
                           self.num_items, self.size / 1024 / 1024,
@@ -51,11 +58,13 @@ class Memcache:
             return self.cache[key]
 
     def put(self, key, value):
+        element_size = sys.getsizeof(value)
+        if element_size > self.capacity * 1024 * 1024:
+            return -1
         # if key already exists, remove the item in order to recalculate the cache size
         if key in self.cache:
             self.invalidate_key(key)
 
-        element_size = sys.getsizeof(value)
         self.free_space(element_size)
         self.num_items += 1
         self.size += element_size
@@ -66,6 +75,7 @@ class Memcache:
             self.cache.move_to_end(key)
         # random policy
         # do nothing
+        return 0
 
     def free_space(self, required_size):
         while self.size + required_size > self.capacity * 1024 * 1024:  # out of capacity
@@ -84,10 +94,14 @@ class Memcache:
         self.cache.clear()
 
     def invalidate_key(self, key):
-        if key in self.cache:
+        if key not in self.cache:
+            return -1
+        else:
             item = self.cache.pop(key)
             self.num_items -= 1
             self.size -= sys.getsizeof(item)
+
+            return 0
 
     # read mem-cache related details from the database and reconfigure it based on the values set by the user
     def refresh_config(self):
@@ -101,6 +115,6 @@ class Memcache:
 
 
 webapp = Flask(__name__)
-memcache = OrderedDict()
+memcache = Memcache()
 
 from app import main
