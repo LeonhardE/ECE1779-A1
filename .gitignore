@@ -1,4 +1,8 @@
 # Mac OS
 .DS_Store
 .lock
+/venv
 /node_modules
+
+# IDEA files
+.idea
