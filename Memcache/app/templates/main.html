@@ -5,33 +5,35 @@
 <html>
     <body>
 
-        <form action="{{ url_for('get')}}" method="post">
+        <form action="{{ url_for('testGet')}}" method="post">
             <label>key:</label>
-            <input type="text" name="key" />
-            <input type="submit" value="get" />
+            <input type="text" name="key" required/>
+            <input type="submit"/>
         </form>
 
-        <form action="{{ url_for('put')}}" method="post">
+        <form action="{{ url_for('testPut')}}" method="post" enctype="multipart/form-data">
             <label>key:</label>
-            <input type="text" name="key" />
-            <label>value:</label>
-            <input type="text" name="value" />
-            <input type="submit" value="put" />
+            <input type="text" name="key" required/>
+            <label>Img:</label>
+            <input type="file" name="myImg" accept="image/*" required/>
+            <input type="submit"/>
         </form>
 
         <form action="{{ url_for('clear')}}" method="post">
-            <input type="submit" value="clear" />
+            <input type="submit"/>
         </form>
 
         <form action="{{ url_for('invalidateKey')}}" method="post">
             <label>key:</label>
             <input type="text" name="key" />
-            <input type="submit" value="invalidate" />
+            <input type="submit"/>
         </form>
 
         <form action="{{ url_for('refreshConfiguration')}}" method="post">
             <input type="submit" value="refresh" />
         </form>
 
-    <body>    
+        <img src="data:;base64,{{ image }}" alt="Uploaded Image">
+
+    </body>
 </html>

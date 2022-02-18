@@ -1,12 +1,14 @@
 import atexit
+import base64
+from io import BytesIO
+from PIL import Image
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from app import webapp, memcache
 from flask import json
 from flask import render_template, url_for, request
 
-# https://stackoverflow.com/questions/21214270/how-to-schedule-a-function-to-run-every-hour-on-flask
-scheduler = BackgroundScheduler(daemon=True)
+scheduler = BackgroundScheduler({'apscheduler.timezone': 'EST'})
 scheduler.add_job(func=memcache.write_statistics, trigger="interval", seconds=5)
 
 # shut down the scheduler when terminating
@@ -59,6 +61,7 @@ def put():
             mimetype='application/json'
         )
 
+    print(memcache)
     return response
 
 
@@ -106,3 +109,43 @@ def refreshConfiguration():
     )
 
     return response
+
+
+# test functionalities
+@webapp.route('/testPut', methods=['POST'])
+def testPut():
+    key = request.form.get('key')
+
+    image = request.files['myImg']
+    image_string = base64.b64encode(image.read())
+    if memcache.put(key, image_string) != -1:
+        response = webapp.response_class(
+            response=json.dumps("OK"),
+            status=200,
+            mimetype='application/json'
+        )
+    else:
+        response = webapp.response_class(
+            response=json.dumps("OUT_OF_CAPACITY"),
+            status=400,
+            mimetype='application/json'
+        )
+
+    print(memcache)
+    return response
+
+
+@webapp.route('/testGet', methods=['POST'])
+def testGet():
+    key = request.form.get('key')
+
+    if memcache.get(key) != -1:
+        image_string = memcache.get(key).decode("utf-8")
+        # image = Image.open(BytesIO(base64.b64decode(image_string)))
+        # image.show()
+
+        print(memcache)
+        return render_template("main.html", image=image_string)
+
+    print(memcache)
+    return render_template("main.html")
