@@ -80,7 +80,7 @@ class Memcache:
         while self.size + required_size > self.capacity * 1024 * 1024:  # out of capacity
             # LRU policy
             if self.policy == "LRU":
-                item = self.cache.popitem(last=False)  # remove the first item
+                item = self.cache.popitem(last=False)[1]  # remove the first item
             # random policy
             else:
                 item = self.cache.pop(random.choice(list(self.cache.keys())))  # remove a random item
