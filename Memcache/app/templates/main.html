@@ -8,7 +8,7 @@
         <form action="{{ url_for('testGet')}}" method="post">
             <label>key:</label>
             <input type="text" name="key" required/>
-            <input type="submit"/>
+            <input type="submit" value="testGet"/>
         </form>
 
         <form action="{{ url_for('testPut')}}" method="post" enctype="multipart/form-data">
@@ -16,21 +16,21 @@
             <input type="text" name="key" required/>
             <label>Img:</label>
             <input type="file" name="myImg" accept="image/*" required/>
-            <input type="submit"/>
+            <input type="submit" value="testPut"/>
         </form>
 
         <form action="{{ url_for('clear')}}" method="post">
-            <input type="submit"/>
+            <input type="submit" value="clear"/>
         </form>
 
         <form action="{{ url_for('invalidateKey')}}" method="post">
             <label>key:</label>
             <input type="text" name="key" />
-            <input type="submit"/>
+            <input type="submit" value="invalidateKey"/>
         </form>
 
         <form action="{{ url_for('refreshConfiguration')}}" method="post">
-            <input type="submit" value="refresh" />
+            <input type="submit" value="refreshConfiguration" />
         </form>
 
         <img src="data:;base64,{{ image }}" alt="Uploaded Image">
