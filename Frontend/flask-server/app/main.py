@@ -1,14 +1,14 @@
 from flask import Flask
 
-app = Flask(__name__)
+from app import webapp
 
 
-@app.route("/")
+@webapp.route("/")
 def index():
     return "Image Storage"
 
 # Recent Keys API
-@app.route("/recentKeys")
+@webapp.route("/recentKeys")
 def recentKeys():
     # generate key data
     return {"date":["2022-02-02", 
@@ -23,7 +23,7 @@ def recentKeys():
                           "image5"]}
 
 
-@app.route("/allKeys")
+@webapp.route("/allKeys")
 def allKeys():
     # generate key data
     return {"date": ["2022-02-02", 
@@ -46,6 +46,3 @@ def allKeys():
                         "image8", 
                         "image9",
                         "image10"]}
-
-if __name__ == "__main__":
-    app.run(port=5000, debug=True)

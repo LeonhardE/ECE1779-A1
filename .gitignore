@@ -1,6 +1,7 @@
 # Mac OS
 .DS_Store
 .lock
+.pyc
 /venv
 /node_modules
 
