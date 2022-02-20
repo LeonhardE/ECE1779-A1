@@ -1,7 +1,7 @@
 import atexit
 import base64
-from io import BytesIO
-from PIL import Image
+# from io import BytesIO
+# from PIL import Image
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from app import webapp, memcache
@@ -10,14 +10,13 @@ from flask import render_template, url_for, request
 
 scheduler = BackgroundScheduler({'apscheduler.timezone': 'EST'})
 scheduler.add_job(func=memcache.write_statistics, trigger="interval", seconds=5)
+scheduler.start()
 
 # shut down the scheduler when terminating
 atexit.register(lambda: scheduler.shutdown())
 
 @webapp.route('/')
 def main():
-    scheduler.start()
-
     return render_template("main.html")
 
 
