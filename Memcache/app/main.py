@@ -9,11 +9,13 @@ from flask import json
 from flask import render_template, url_for, request
 
 scheduler = BackgroundScheduler({'apscheduler.timezone': 'EST'})
-scheduler.add_job(func=memcache.write_statistics, trigger="interval", seconds=5)
+scheduler.add_job(func=memcache.pulse, trigger="interval", seconds=5)
 scheduler.start()
 
-# shut down the scheduler when terminating
-atexit.register(lambda: scheduler.shutdown())
+# when terminating
+atexit.register(lambda: scheduler.shutdown())  # shut down the scheduler
+atexit.register(lambda: memcache.dbUtil.clear_statistics())  # Clear stored statistics
+atexit.register(lambda: memcache.dbUtil.db.clse())  # Close database connector
 
 @webapp.route('/')
 def main():
@@ -106,6 +108,27 @@ def refreshConfiguration():
         status=200,
         mimetype='application/json'
     )
+
+    return response
+
+
+# check whether memcache contains one specific key
+@webapp.route('/existsKey', methods=['POST'])
+def existsKey():
+    key = request.form.get('key')
+
+    if memcache.exists_key(key):
+        response = webapp.response_class(
+            response=json.dumps("True"),
+            status=200,
+            mimetype='application/json'
+        )
+    else:
+        response = webapp.response_class(
+            response=json.dumps("False"),
+            status=200,
+            mimetype='application/json'
+        )
 
     return response
 

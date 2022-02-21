@@ -2,11 +2,13 @@ import random
 import sys
 from collections import OrderedDict
 
+from app import DBUtile
+
 
 # https://www.geeksforgeeks.org/lru-cache-in-python-using-ordereddict/
 class Memcache:
 
-    def __init__(self, capacity=2, policy="LRU"):
+    def __init__(self, capacity=128, policy="LRU"):
         self.cache = OrderedDict()
         # miss rate information
         self.num_requests = 0  # int
@@ -19,8 +21,8 @@ class Memcache:
         # configuration parameters
         self.capacity = capacity  # MB
         self.policy = policy  # "LRU" or "Random"
-        # TODO: update settings from database
-        self.refresh_config()
+
+        self.dbUtil = DBUtile.DBUtil()
 
     def __str__(self):
         msg = "------ configuration parameters -------\n" \
@@ -102,12 +104,25 @@ class Memcache:
 
             return 0
 
+    def exists_key(self, key):
+        if key in self.cache:
+            return True
+        return False
+
+    # the current statistics for the mem-cache
+    def write_statistics(self):
+        # write statistics into database
+        self.dbUtil.put_statistics(self.num_items, self.size, self.num_requests, self.num_miss)
+
     # read mem-cache related details from the database and reconfigure it based on the values set by the user
     def refresh_config(self):
-        # TODO: update settings from database
-        pass
+        # update settings from database
+        config = self.dbUtil.get_config()
+        self.capacity = config[0]
+        self.policy = config[1]
 
-    # the current statistics for the mem-cache over the past 10 minutes
-    def write_statistics(self):
-        # TODO: write statistics into database
-        print("Writing statistics into database...")
+        self.free_space(0)  # capacity might shrink down as configuration was updated
+
+    def pulse(self):
+        self.write_statistics()
+        self.refresh_config()
