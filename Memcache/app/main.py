@@ -93,7 +93,7 @@ def invalidateKey():
     else:
         response = webapp.response_class(
             response=json.dumps("UNKNOWN_KEY"),
-            status=400,
+            status=200,
             mimetype='application/json'
         )
 
