@@ -23,6 +23,7 @@ class Memcache:
         self.policy = policy  # "LRU" or "Random"
 
         self.dbUtil = DBUtile.DBUtil()
+        self.dbUtil.clear_statistics()
 
     def __str__(self):
         msg = "------ configuration parameters -------\n" \

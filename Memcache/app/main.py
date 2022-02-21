@@ -14,8 +14,8 @@ scheduler.start()
 
 # when terminating
 atexit.register(lambda: scheduler.shutdown())  # shut down the scheduler
-atexit.register(lambda: memcache.dbUtil.clear_statistics())  # Clear stored statistics
-atexit.register(lambda: memcache.dbUtil.db.clse())  # Close database connector
+# atexit.register(lambda: memcache.dbUtil.clear_statistics())  # Clear stored statistics
+atexit.register(lambda: memcache.dbUtil.db.close())  # Close database connector
 
 @webapp.route('/')
 def main():

@@ -34,7 +34,7 @@ INSERT INTO `statistics` (`timestamp`, `num_item`, `size`, `num_request`, `num_m
 # get utilization statistics
 SELECT `timestamp`, `num_item`, `size`, `num_request`, `num_miss` FROM statistics;
 # update configure
-UPDATE `config` SET `capacity` = 1, `replace_policy` = 'Random';
+UPDATE `config` SET `capacity` = 16, `replace_policy` = 'Random';
 # get configure
 SELECT `capacity`, `replace_policy` FROM `config`;
 # write utilization statistics
