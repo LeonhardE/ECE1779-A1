@@ -1,0 +1,1 @@
+cd Frontend && ./run.sh & cd Memcache && ./run.sh

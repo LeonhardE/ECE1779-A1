@@ -14,13 +14,14 @@ CREATE TABLE `image`(
 );
 
 CREATE TABLE `statistics`(
+    `id` INT AUTO_INCREMENT,
 	`timestamp` DATETIME(6),
     `num_item` SMALLINT,
     `size` INT,
     `num_request` INT,
     `num_GET_request` INT,
     `num_miss` INT,
-    PRIMARY KEY (`timestamp`)
+    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `config`(

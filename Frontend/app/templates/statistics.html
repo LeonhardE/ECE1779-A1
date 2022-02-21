@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>Statistics</h1>
+    <h2>Current Statistics</h2>
+    <table> 
+        <thead> 
+               <th>Number of Items</th>
+               <th>Total Size of Items (MB)</th>
+               <th>Number of Requests</th>
+               <th>Miss Rate</th>
+               <th>Hit Rate</th>
+    
+               
+        </thead> 
+        {% for row in current %}
+            <tr>
+                <td>{{ row[0] }}</td> 
+                <td>{{ row[1]/1024/1024 }}</td> 
+                <td>{{ row[2] }}</td> 
+                {% if row[3] == 0 %}
+                    <td>{{ "NULL" }}</td>
+                    <td>{{ "NULL" }}</td>
+                {% else %}
+                    <td>{{ row[4]/row[3] }}</td>
+                    <td>{{ 1-row[4]/row[3] }}</td>
+                {% endif %}
+                
+            </tr>
+        {% endfor %}
+        </table>
+    <h2>History</h2>
+    <table> 
+    <thead> 
+           <th>Timestamp</th>
+           <th>Number of Items</th>
+           <th>Total Size of Items (MB)</th>
+           <th>Number of Requests</th>
+           <th>Number of GET Requests</th>
+           <th>Number of Miss Requests</th>
+
+           
+    </thead> 
+    {% for row in cursor %}
+        <tr>
+            <td>{{ row[0] }}</td> 
+            <td>{{ row[1] }}</td> 
+            <td>{{ row[2]/1024/1024 }}</td> 
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

@@ -28,7 +28,7 @@ def get():
 
     value = memcache.get(key)
     if value != -1:
-        image_string = value.decode("utf-8")
+        image_string = value
         response = webapp.response_class(
             response=json.dumps(image_string),
             status=200,

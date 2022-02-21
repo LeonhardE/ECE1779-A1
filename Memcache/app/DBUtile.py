@@ -20,7 +20,7 @@ class DBUtil:
                                        database=self.database)
 
     def put_statistics(self, num_item, size, num_request, num_get_request, num_miss):
-        cursor = self.db.cursor()
+        cursor = self.db.cursor(buffered=True)
         query = "INSERT INTO `statistics` (`timestamp`, `num_item`, `size`," \
                 + "`num_request`, `num_GET_request`, `num_miss`)" \
                 + "VALUES (NOW(), {}, {}, {}, {}, {});"
@@ -32,7 +32,7 @@ class DBUtil:
         return 0
 
     def put_config(self, capacity, replace_policy):
-        cursor = self.db.cursor()
+        cursor = self.db.cursor(buffered=True)
         query = "UPDATE config SET `capacity` = {}, `replace_policy` = '{}';"
         cursor.execute(query.format(capacity, replace_policy))
 
@@ -43,7 +43,7 @@ class DBUtil:
         self.db.commit()
 
     def get_config(self):
-        cursor = self.db.cursor()
+        cursor = self.db.cursor(buffered=True)
         query = "SELECT `capacity`, `replace_policy` FROM config;"
         cursor.execute(query)
 
@@ -51,7 +51,7 @@ class DBUtil:
             return i
 
     def clear_statistics(self):
-        cursor = self.db.cursor()
+        cursor = self.db.cursor(buffered=True)
         query = "DELETE FROM statistics;"
         cursor.execute(query)
 

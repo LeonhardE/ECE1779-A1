@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Image Upload</h1>
+    <ul>
+        <li><a href="{{url_for('upload_form')}}">File Upload</a></li>
+        <li><a href="{{url_for('list_keys')}}">List All Keys</a></li>
+        <li><a href="{{url_for('config_form')}}">Memcache Config</a></li>
+        <li><a href="{{url_for('search_form')}}">Search Image</a></li>
+        <li><a href="{{url_for('get_statistics')}}">Statistics</a></li>
+    </ul>
+
+{% endblock %}
