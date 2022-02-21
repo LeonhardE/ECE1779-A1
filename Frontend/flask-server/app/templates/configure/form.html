@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Setting</title>
+  </head>
+
+  <body>
+    <h1>Memcache Setting</h1>
+    <form action="/SetConfig"  enctype="multipart/form-data" method="post">
+      Capacity <input type="text" name="capacity">MB<br />
+      Replacement Policy
+      <select name="policy">
+          <option value="Random" selected="selected">Random Replacement</option>
+          <option value="LRU">Least Recently Used</option>
+      </select>
+      
+
+      <input type="submit" value="Send">
+    </form>
+
+  </body>
+</html>

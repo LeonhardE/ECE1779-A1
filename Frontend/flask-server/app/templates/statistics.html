@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+    <table /> 
+    <thead> 
+           <th>Timestamp</th>
+           <th>Number of Items</th>
+           <th>Total Size of Items</th>
+           <th>Number of Requests</th>
+           <th>Miss Rate</th>
+
+           
+    </thead> 
+    {% for row in cursor %}
+        <tr>
+            <td>{{ row[0]}}</td> 
+            <td>{{ row[1]}}</td> 
+            <td>{{ row[2]}}</td> 
+            <td>{{ row[3]}}</td>
+            <td>{{ row[4]}}</td>
+            
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

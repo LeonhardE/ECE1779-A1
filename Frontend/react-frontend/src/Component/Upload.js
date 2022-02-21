@@ -1,4 +1,5 @@
-import * as React from 'react';
+import * as React from "react";
+import { useForm } from "react-hook-form"
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -98,6 +99,22 @@ function UploadContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const { register, handleSubmit } = useForm()
+  
+  const onSubmit = (input) => {
+    const data = new FormData()
+    data.append('uploadphoto', input.uploadphoto[0])
+    data.append('imagekey', input.imagekey)
+    console.log(data)
+
+    fetch("/api/upload", {
+      method: 'POST',
+      body: data,
+    }).then((response) => {
+      console.log(response)
+      console.log(response.json())
+    })
+  }
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -165,8 +182,8 @@ function UploadContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             {/* Code here */}
+
             <Stack
-              component="form"
               sx={{
                 width: '25ch',
               }}
@@ -174,15 +191,11 @@ function UploadContent() {
               noValidate
               autoComplete="off"
             >
-              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                <TextField id="input-with-sx" label="Enter Key Value" variant="standard" />
-              </Box>
             
-              <Input
+              {/* <Input
                 style={{ display: 'none' }}
-                id="upload-photo"
-                name="upload-photo"
+                id="uploadphoto"
+                name="uploadphoto"
                 type="file"
               />
 
@@ -198,8 +211,66 @@ function UploadContent() {
 
               <Button color="secondary" variant="contained" component="span">
                 Upload button
-              </Button>
+              </Button> */}
+              <form onSubmit={handleSubmit(onSubmit)}>  
+                <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                  <KeyIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                  <TextField {...register('imagekey', {require: true})} id="input-with-sx" label="Enter Key Value" variant="standard" />
+                </Box>     
+                <br />
+                <label>
+                  <Input 
+                    style={{display: 'none'}}
+                    accept="image/*" 
+                    id="contained-button-file"
+                    multiple 
+                    type="file"
+                    {...register('uploadphoto', {require: true})}
+                  />
+                  <Button variant="contained" component="span">
+                    Select
+                  </Button>
+                </label>
+                <label>
+                  <Input 
+                    style={{display: 'none'}}
+                    type="submit" 
+                  />
+                  <Button color="secondary" variant="contained" component="span">
+                    Upload
+                  </Button>
+                </label>
+              </form>
             </Stack>
+
+
+            {/* <Stack direction="row" alignItems="center" spacing={2}>
+              <form onSubmit={handleSubmit(onSubmit)}>           
+                <label>
+                  <Input 
+                    style={{display: 'none'}}
+                    accept="image/*" 
+                    id="contained-button-file"
+                    multiple 
+                    type="file"
+                    {...register('uploadphoto', {require: true})}
+                  />
+                  <Button variant="contained" component="span">
+                    Select
+                  </Button>
+                </label>
+                
+                <label>
+                  <Input 
+                    style={{display: 'none'}}
+                    type="submit" 
+                  />
+                  <Button color="secondary" variant="contained" component="span">
+                    Upload
+                  </Button>
+                </label>
+              </form>
+            </Stack> */}
 
             <Copyright sx={{ pt: 4 }} />
           </Container>
