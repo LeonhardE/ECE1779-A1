@@ -28,8 +28,9 @@ def get():
 
     value = memcache.get(key)
     if value != -1:
+        image_string = value.decode("utf-8")
         response = webapp.response_class(
-            response=json.dumps(value),
+            response=json.dumps(image_string),
             status=200,
             mimetype='application/json'
         )
@@ -162,8 +163,9 @@ def testPut():
 def testGet():
     key = request.form.get('key')
 
-    if memcache.get(key) != -1:
-        image_string = memcache.get(key).decode("utf-8")
+    value = memcache.get(key)
+    if value != -1:
+        image_string = value.decode("utf-8")
         # image = Image.open(BytesIO(base64.b64decode(image_string)))
         # image.show()
 

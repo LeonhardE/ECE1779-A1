@@ -18,6 +18,7 @@ CREATE TABLE `statistics`(
     `num_item` SMALLINT,
     `size` INT,
     `num_request` INT,
+    `num_GET_request` INT,
     `num_miss` INT,
     PRIMARY KEY (`timestamp`)
 );
@@ -32,7 +33,7 @@ CREATE TABLE `config`(
 INSERT INTO `statistics` (`timestamp`, `num_item`, `size`, `num_request`, `num_miss`) VALUES (NOW(), 0, 0, 0, 0);
 
 # get utilization statistics
-SELECT `timestamp`, `num_item`, `size`, `num_request`, `num_miss` FROM statistics;
+SELECT `timestamp`, `num_item`, `size`, `num_request`, `num_GET_request`, `num_miss` FROM statistics;
 # update configure
 UPDATE `config` SET `capacity` = 16, `replace_policy` = 'Random';
 # get configure

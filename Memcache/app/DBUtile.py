@@ -19,11 +19,12 @@ class DBUtil:
                                        host=self.host,
                                        database=self.database)
 
-    def put_statistics(self, num_item, size, num_request, num_miss):
+    def put_statistics(self, num_item, size, num_request, num_get_request, num_miss):
         cursor = self.db.cursor()
-        query = "INSERT INTO `statistics` (`timestamp`, `num_item`, `size`, `num_request`, `num_miss`)" \
-                + "VALUES (NOW(), {}, {}, {}, {});"
-        cursor.execute(query.format(num_item, size, num_request, num_miss))
+        query = "INSERT INTO `statistics` (`timestamp`, `num_item`, `size`," \
+                + "`num_request`, `num_GET_request`, `num_miss`)" \
+                + "VALUES (NOW(), {}, {}, {}, {}, {});"
+        cursor.execute(query.format(num_item, size, num_request, num_get_request, num_miss))
 
         self.db.commit()
         if cursor.rowcount == 0:

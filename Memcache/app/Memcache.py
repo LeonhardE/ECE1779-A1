@@ -12,6 +12,7 @@ class Memcache:
         self.cache = OrderedDict()
         # miss rate information
         self.num_requests = 0  # int
+        self.num_GET_requests = 0  # int
         self.num_miss = 0  # int
 
         # utilization over time
@@ -31,22 +32,23 @@ class Memcache:
               + "-------- utilization over time --------\n" \
               + "# of items: {}\ntotal size: {} MB\n" \
               + "-------- miss rate information --------\n" \
-              + "# of requests: {}\n# of miss: {}\nmiss rate: {}\nhit rate: {}\n" \
+              + "# of requests: {}\n# of GET requests: {}\n# of miss: {}\nmiss rate: {}\nhit rate: {}\n" \
               + "------------- keys stored -------------\n" \
               + str(list(self.cache.keys())) + "\n" \
               + "---------------------------------------"
-        if self.num_requests == 0:
+        if self.num_GET_requests == 0:
             miss_rate = 1
         else:
-            miss_rate = self.num_miss / self.num_requests
+            miss_rate = self.num_miss / self.num_GET_requests
 
         return msg.format(self.capacity, self.policy,
                           self.num_items, self.size / 1024 / 1024,
-                          self.num_requests, self.num_miss,
+                          self.num_requests, self.num_GET_requests, self.num_miss,
                           miss_rate, 1 - miss_rate)
 
     def get(self, key):
         self.num_requests += 1
+        self.num_GET_requests += 1
         if key not in self.cache:
             self.num_miss += 1
             return -1
@@ -60,6 +62,7 @@ class Memcache:
             return self.cache[key]
 
     def put(self, key, value):
+        self.num_requests += 1
         element_size = sys.getsizeof(value)
         if element_size > self.capacity * 1024 * 1024:
             return -1
@@ -91,11 +94,13 @@ class Memcache:
             self.size -= sys.getsizeof(item)
 
     def clear(self):
+        self.num_requests += 1
         self.num_items = 0
         self.size = 0
         self.cache.clear()
 
     def invalidate_key(self, key):
+        self.num_requests += 1
         if key not in self.cache:
             return -1
         else:
@@ -113,7 +118,11 @@ class Memcache:
     # the current statistics for the mem-cache
     def write_statistics(self):
         # write statistics into database
-        self.dbUtil.put_statistics(self.num_items, self.size, self.num_requests, self.num_miss)
+        self.dbUtil.put_statistics(self.num_items,
+                                   self.size,
+                                   self.num_requests,
+                                   self.num_GET_requests,
+                                   self.num_miss)
 
     # read mem-cache related details from the database and reconfigure it based on the values set by the user
     def refresh_config(self):
