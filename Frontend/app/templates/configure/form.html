@@ -1,13 +1,8 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>Setting</title>
-  </head>
-
-  <body>
+{% extends "base.html" %}
+{% block content %}
     <h1>Memcache Setting</h1>
     <form action="/SetConfig"  enctype="multipart/form-data" method="post">
-      Capacity <input type="text" name="capacity">MB<br />
+      Capacity <input type="text" name="capacity" required>MB<br />
       Replacement Policy
       <select name="policy">
           <option value="Random" selected="selected">Random Replacement</option>
@@ -17,6 +12,7 @@
 
       <input type="submit" value="Send">
     </form>
-
-  </body>
-</html>
+    <form action="/ClearMem" method="post">
+      <input type="submit" value="Clear Memcache">
+    </form>
+{% endblock %}

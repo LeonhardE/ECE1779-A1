@@ -1,1 +1,1 @@
-gunicorn --bind 0.0.0.0:5001 --workers=1 wsgi:webapp
+gunicorn --bind 0.0.0.0:5001 --workers=3 --worker-class gevent wsgi:webapp

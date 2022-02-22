@@ -13,16 +13,15 @@ def upload_form():
 def upload_image():
 
     key = request.form.get("key")
-    
+
+    # Save the image
+    new_image = request.files['file']
+    fname = os.path.join('app/static/images', key)
+    new_image.save(fname)
     # Invalidate key in Memcache
     data = dict(key=key)
     response = requests.post("http://localhost:5001/invalidateKey", data=data)
     print(response.text)
-
-    # Save the image
-    new_image = request.files['file']
-    fname = os.path.join('app/static', key)
-    new_image.save(fname)
     # Write key and fname in MySQL if it is not in database yet
     db = DBUtile.DBUtil()
     keyset = db.get_all_key()

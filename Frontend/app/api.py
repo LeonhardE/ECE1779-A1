@@ -10,7 +10,7 @@ import os
 def upload_interface():
 
     # Check if miss image
-    if request.files['file'].getbuffer().nbytes == 0:
+    if request.files.get('file') == None or request.files['file'].getbuffer().nbytes == 0:
         return {
             "success": "false",
             "error": {
@@ -21,7 +21,7 @@ def upload_interface():
     
     key = request.form.get("key")
     # Check if miss key
-    if key == '':
+    if key == '' or key == None:
         return {
             "success": "false",
             "error": {
@@ -29,16 +29,15 @@ def upload_interface():
                 "message": "Missing image key"
             }
         }
-    
+
+    # Save the image
+    new_image = request.files['file']
+    fname = os.path.join('app/static/images', key)
+    new_image.save(fname)
     # Invalidate key in Memcache
     data = dict(key=key)
     response = requests.post("http://localhost:5001/invalidateKey", data=data)
     print(response.text)
-
-    # Save the image
-    new_image = request.files['file']
-    fname = os.path.join('app/static', key)
-    new_image.save(fname)
     # Write key and fname in MySQL if it is not in database yet
     db = DBUtile.DBUtil()
     keyset = db.get_all_key()
@@ -80,7 +79,7 @@ def retrieve_image_interface(key_value):
                 "message": "Invalid key value"
             }
         }
-    # put key and image into memcache
+    # put key and image into response
     image_string = ""
     with open(address, "rb") as image:
         image_string = base64.encodebytes(image.read()).decode('utf-8')

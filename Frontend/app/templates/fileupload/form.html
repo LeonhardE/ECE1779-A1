@@ -1,19 +1,13 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>uploadImage</title>
-  </head>
-
-  <body>
+{% extends "base.html" %}
+{% block content %}
     <h1>Upload Form</h1>
     <form action="/upload"  enctype="multipart/form-data" method="post">
-      Key <input type="text" name="key" required><br />
+      Key <input type="text" name="key" maxlength="10" required><br /><br />
 
-      What is the image files to upload? <input type="file" name="file" required><br />
+      <input type="file" class="custom-file-input" name="file" required><br /><br />
 
       <input type="submit" value="Send">
       <input type="reset" value="Reset">
     </form>
 
-  </body>
-</html>
+{% endblock %}

@@ -1,16 +1,10 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>searchImage</title>
-  </head>
-
-  <body>
+{% extends "base.html" %}
+{% block content %}
     <h1>Search Image</h1>
     <form action="/search"  enctype="multipart/form-data" method="post">
-      Key <input type="text" name="key"><br />
+      Key <input type="text" name="key" maxlength="10" required><br /><br />
 
       <input type="submit" value="Search">
     </form>
 
-  </body>
-</html>
+{% endblock %}

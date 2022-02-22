@@ -1,6 +1,6 @@
-CREATE DATABASE `estore`;
+CREATE DATABASE `ImageDB`;
 
-USE `estore`;
+USE `ImageDB`;
 
 Drop TABLE if exists image;
 Drop TABLE if exists statistics;

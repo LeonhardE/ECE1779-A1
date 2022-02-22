@@ -1,13 +1,8 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>Search Result</title>
-  </head>
-
-  <body>
+{% extends "base.html" %}
+{% block content %}
     <h1>Search Image Result</h1>
 
-    <img src={{address}}/>
-
-  </body>
-</html>
+    <div class="showimg">
+        <img src={{address}}/>
+    </div>
+{% endblock %}

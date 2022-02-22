@@ -8,4 +8,5 @@ def list_keys():
     # get key data
     db = DBUtile.DBUtil()
     cursor = db.get_all_list()
-    return render_template("list.html", title="List All Keys", cursor=cursor)
+    return render_template("list.html", cursor=cursor)
+

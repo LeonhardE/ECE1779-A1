@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
-        <title>{{title}}</title>
-
+        <title>Gallery</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="static/style.css" rel="stylesheet">
     </head>
     <body>
-        <h1>{{title}}</h2>
-        {% block content %}
-        {% endblock %}
+        <div class="topnav">
+            <a href="/">Home</a>
+            <a href="{{url_for('upload_form')}}">Upload</a>
+            <a href="{{url_for('list_keys')}}">Keys</a>
+            <a href="{{url_for('search_form')}}">Search</a>
+            <a href="{{url_for('get_statistics')}}">Statistics</a>
+            <a href="{{url_for('config_form')}}">Memcache Config</a>
+        </div>
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
     </body>
 </html>

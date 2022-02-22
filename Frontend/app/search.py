@@ -14,15 +14,6 @@ def search_form():
 def search_img():
     
     key = request.form.get("key")
-    # Check if miss key
-    if key == '':
-        return {
-            "success": "false",
-            "error": {
-                "code": 404,
-                "message": "Missing image key"
-            }
-        }
     # Get from memcache
     data = dict(key=key)
     response = requests.post("http://localhost:5001/get", data=data)    
